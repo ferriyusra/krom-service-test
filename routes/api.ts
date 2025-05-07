@@ -8,16 +8,25 @@ import authMiddleware from '../middleware/auth.middleware';
 
 import AuthController from '../modules/controller/auth.controller';
 import UserController from '../modules/controller/user.controller';
+import { MediaController } from '../modules/controller/media.controller';
+
+import mediaMiddleware from '../middleware/media.middleware';
 
 export class ApiRouter {
 	private router: Router;
 	private authController: AuthController;
 	private userController: UserController;
+	private mediaController: MediaController;
 
-	constructor(authController: AuthController, userController: UserController) {
+	constructor(
+		authController: AuthController,
+		userController: UserController,
+		mediaController: MediaController
+	) {
 		this.router = express.Router();
 		this.authController = authController;
 		this.userController = userController;
+		this.mediaController = mediaController;
 		this.initializeRoutes();
 	}
 
@@ -60,23 +69,21 @@ export class ApiRouter {
 			*/
 		);
 
-		// User Route
-		// this.router.post(
-		// 	'/v1/users',
-		// 	[authMiddleware, aclMiddleware([ROLES.ADMIN])],
-		// 	(req: IReqUser, res: Response, _next: NextFunction) =>
-		// 		this.userController.create(req, res)
-		// 	/*
-		// 	#swagger.tags = ['User']
-		// 	#swagger.security = [{
-		//   	"bearerAuth": {}
-		//   }]
-		// 	#swagger.requestBody = {
-		// 		required: true,
-		// 		schema: {$ref: '#/components/schemas/createUserRequest'}
-		// 	}
-		// 	*/
-		// );
+		// Media Route
+		this.router.post(
+			'/v1/media/upload-single',
+			[authMiddleware, aclMiddleware([ROLES.ADMIN])],
+			mediaMiddleware.single('file'),
+			(req: IReqUser, res: Response, _next: NextFunction) =>
+				this.mediaController.single(req, res)
+		);
+
+		this.router.delete(
+			'/v1/media/remove',
+			[authMiddleware, aclMiddleware([ROLES.ADMIN])],
+			(req: IReqUser, res: Response, _next: NextFunction) =>
+				this.mediaController.remove(req, res)
+		);
 	}
 
 	public getRouter(): Router {
@@ -86,7 +93,12 @@ export class ApiRouter {
 
 export default (
 	authController: AuthController,
-	userController: UserController
+	userController: UserController,
+	mediaController: MediaController
 ): Router => {
-	return new ApiRouter(authController, userController).getRouter();
+	return new ApiRouter(
+		authController,
+		userController,
+		mediaController
+	).getRouter();
 };

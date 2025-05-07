@@ -55,7 +55,7 @@ class AuthController {
 			}
 
 			const token = generateToken({
-				user_id: userByIdentifier.user_id,
+				user_id: userByIdentifier.userId,
 				role: userByIdentifier.role,
 			});
 			return response.success(res, token, 'Login success');
@@ -67,7 +67,7 @@ class AuthController {
 	async me(req: IReqUser, res: Response) {
 		try {
 			const user = req.user;
-			const data = await this.authService.findById(`${user?.user_id}`);
+			const data = await this.authService.findById(`${user?.userId}`);
 
 			const result = toUserContract(data);
 			return response.success(res, result, 'Success get user profile');

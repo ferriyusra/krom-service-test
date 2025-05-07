@@ -18,11 +18,17 @@ interface QueryConfig {
 	limitDefault: number;
 	sortDefault: string;
 }
+interface CloudinaryConfig {
+	cloudinaryCloudName?: string;
+	cloudinaryApiKey?: string;
+	cloudinaryApiSecret?: string;
+}
 
 interface Config {
 	app: AppConfig;
 	auth: AuthConfig;
 	query: QueryConfig;
+	cloudinary: CloudinaryConfig;
 }
 
 const config: Config = {
@@ -41,6 +47,11 @@ const config: Config = {
 	query: {
 		limitDefault: Number(process.env.QUERY_LIMIT_DEFAULT) || 10,
 		sortDefault: process.env.QUERY_SORT_DEFAULT || 'created_at desc',
+	},
+	cloudinary: {
+		cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME,
+		cloudinaryApiKey: process.env.CLOUDINARY_API_KEY,
+		cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET,
 	},
 };
 

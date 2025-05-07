@@ -6,6 +6,9 @@ import UserService from './user/service';
 
 import AuthController from './controller/auth.controller';
 import UserController from './controller/user.controller';
+import { CloudinaryUploader } from '../util/uploader';
+import { MediaController } from './controller/media.controller';
+import { MediaService } from './media/media.service';
 
 function createAuthRepository(db: any): AuthRepository {
 	return new AuthRepository(db);
@@ -31,6 +34,14 @@ function createUserController(service: UserService): UserController {
 	return new UserController(service);
 }
 
+function createMediaService(cloudinary: CloudinaryUploader): MediaService {
+	return new MediaService(cloudinary);
+}
+
+function createMediaController(mediaService: MediaService): MediaController {
+	return new MediaController(mediaService);
+}
+
 export {
 	// Repo
 	createAuthRepository,
@@ -39,8 +50,10 @@ export {
 	// Service
 	createUserService,
 	createAuthService,
+	createMediaService,
 
 	// Controller
 	createAuthController,
 	createUserController,
+	createMediaController,
 };

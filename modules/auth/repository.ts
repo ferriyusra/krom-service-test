@@ -11,6 +11,26 @@ class AuthRepository {
 		this.db = dbClient;
 	}
 
+	async register(user: any) {
+		const createdUser = await this.db.user.create({
+			data: {
+				fullName: user.fullName,
+				email: user.email,
+				password: encrypt(user.password),
+				userId: uuidv4(),
+				updatedAt: new Date(),
+			},
+			select: {
+				userId: true,
+				fullName: true,
+				email: true,
+				createdAt: true,
+				updatedAt: true,
+			},
+		});
+		return toDto(createdUser);
+	}
+
 	async userByIdentifier(identifier: string) {
 		return await this.db.user.findFirst({
 			where: {
@@ -39,8 +59,8 @@ function toDto(data: any) {
 		userId: data.userId,
 		fullName: data.full_name,
 		email: data.email,
-		createdAt: data.created_at,
-		updatedAt: data.updated_at,
+		createdAt: data.createdAt,
+		updatedAt: data.updatedAt,
 	};
 }
 

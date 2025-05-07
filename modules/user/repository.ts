@@ -9,24 +9,7 @@ class UserRepository {
 	}
 
 	async create(data: any) {
-		const createdUser = await this.db.users.create({
-			data: {
-				user_id: uuidv4(),
-				full_name: data.fullName,
-				email: data.email,
-				role: data.role,
-				updated_at: new Date(),
-			},
-			select: {
-				user_id: true,
-				full_name: true,
-				email: true,
-				role: true,
-				created_at: true,
-				updated_at: true,
-			},
-		});
-		return toDto(createdUser);
+		return null;
 	}
 }
 

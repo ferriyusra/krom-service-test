@@ -26,14 +26,17 @@ import {
 	// Service
 	createAuthService,
 	createUserService,
+	createMediaService,
 
 	// Controller
 	createAuthController,
 	createUserController,
+	createMediaController,
 } from './modules';
 
 import apiRouter from './routes/api';
 import docs from './docs/route';
+import { CloudinaryUploader } from './util/uploader';
 
 logger.info('Initializing express');
 const app = express();
@@ -88,17 +91,20 @@ async function main() {
 	const authService = createAuthService(authRepository);
 	const userService = createUserService(userRepository);
 
+	const mediaService = createMediaService(new CloudinaryUploader());
+
 	const authController = createAuthController(authService);
 	const userController = createUserController(userService);
+	const mediaController = createMediaController(mediaService);
 
 	// Initialize routes
 	logger.info('Initializing routes');
-	app.use('/api', apiRouter(authController, userController));
+	app.use('/', apiRouter(authController, userController, mediaController));
 
 	// Initialize API documentation
 	docs(app);
 
-	app.get('/', (_req, res) => {
+	app.get('/health-check', (_req, res) => {
 		res.send(`${config.app.name} ${config.app.env} v${config.app.version}.`);
 	});
 
