@@ -21,16 +21,18 @@ import { createPrismaClient } from './util/database';
 import {
 	// Repo
 	createAuthRepository,
-	createUserRepository,
+	createApplicationRepository,
+	createApplicantRepository,
 
 	// Service
 	createAuthService,
-	createUserService,
+	createApplicationService,
+	createApplicantService,
 	createMediaService,
 
 	// Controller
 	createAuthController,
-	createUserController,
+	createApplicationController,
 	createMediaController,
 } from './modules';
 
@@ -86,20 +88,28 @@ async function main() {
 	// Initialize dependencies
 	logger.info('Initializing dependencies');
 	const authRepository = createAuthRepository(db);
-	const userRepository = createUserRepository(db);
+	const applicationRepository = createApplicationRepository(db);
+	const applicantReposiory = createApplicantRepository(db);
 
 	const authService = createAuthService(authRepository);
-	const userService = createUserService(userRepository);
+	const applicationService = createApplicationService(applicationRepository);
+	const applicantService = createApplicantService(applicantReposiory);
 
 	const mediaService = createMediaService(new CloudinaryUploader());
 
 	const authController = createAuthController(authService);
-	const userController = createUserController(userService);
+	const applicationController = createApplicationController(
+		applicationService,
+		applicantService
+	);
 	const mediaController = createMediaController(mediaService);
 
 	// Initialize routes
 	logger.info('Initializing routes');
-	app.use('/', apiRouter(authController, userController, mediaController));
+	app.use(
+		'/',
+		apiRouter(authController, applicationController, mediaController)
+	);
 
 	// Initialize API documentation
 	docs(app);

@@ -1,11 +1,14 @@
 import AuthRepository from './auth/repository';
-import UserRepository from './user/repository';
+import ApplicationRepository from './application/repository';
+import ApplicantRepository from './applicant/repository';
 
 import AuthService from './auth/service';
-import UserService from './user/service';
+import ApplicationService from './application/service';
+import ApplicantService from './applicant/service';
 
 import AuthController from './controller/auth.controller';
-import UserController from './controller/user.controller';
+import ApplicationController from './controller/application.controller';
+
 import { CloudinaryUploader } from '../util/uploader';
 import { MediaController } from './controller/media.controller';
 import { MediaService } from './media/media.service';
@@ -22,16 +25,31 @@ function createAuthController(authService: AuthService): AuthController {
 	return new AuthController(authService);
 }
 
-function createUserRepository(db: any): UserRepository {
-	return new UserRepository(db);
+function createApplicantRepository(db: any): ApplicantRepository {
+	return new ApplicantRepository(db);
 }
 
-function createUserService(repository: UserRepository): UserService {
-	return new UserService(repository);
+function createApplicantService(
+	repository: ApplicantRepository
+): ApplicantService {
+	return new ApplicantService(repository);
 }
 
-function createUserController(service: UserService): UserController {
-	return new UserController(service);
+function createApplicationRepository(db: any): ApplicationRepository {
+	return new ApplicationRepository(db);
+}
+
+function createApplicationService(
+	repository: ApplicationRepository
+): ApplicationService {
+	return new ApplicationService(repository);
+}
+
+function createApplicationController(
+	service: ApplicationService,
+	applicantService: ApplicantService
+): ApplicationController {
+	return new ApplicationController(service, applicantService);
 }
 
 function createMediaService(cloudinary: CloudinaryUploader): MediaService {
@@ -45,15 +63,17 @@ function createMediaController(mediaService: MediaService): MediaController {
 export {
 	// Repo
 	createAuthRepository,
-	createUserRepository,
+	createApplicationRepository,
+	createApplicantRepository,
 
 	// Service
-	createUserService,
+	createApplicationService,
+	createApplicantService,
 	createAuthService,
 	createMediaService,
 
 	// Controller
 	createAuthController,
-	createUserController,
+	createApplicationController,
 	createMediaController,
 };

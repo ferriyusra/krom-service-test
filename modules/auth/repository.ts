@@ -1,8 +1,6 @@
-import { IRegister } from './interface';
 import { v4 as uuidv4 } from 'uuid';
 import { encrypt } from '../../util/encryption';
 import { PrismaClient } from '@prisma/client';
-import { createPrismaClient } from '../../util/database';
 
 class AuthRepository {
 	private db: PrismaClient;
@@ -14,18 +12,17 @@ class AuthRepository {
 	async register(user: any) {
 		const createdUser = await this.db.user.create({
 			data: {
-				fullName: user.fullName,
+				full_name: user.fullName,
 				email: user.email,
 				password: encrypt(user.password),
-				userId: uuidv4(),
-				updatedAt: new Date(),
+				user_id: uuidv4(),
 			},
 			select: {
-				userId: true,
-				fullName: true,
+				user_id: true,
+				full_name: true,
 				email: true,
-				createdAt: true,
-				updatedAt: true,
+				created_at: true,
+				updated_at: true,
 			},
 		});
 		return toDto(createdUser);
@@ -39,7 +36,7 @@ class AuthRepository {
 						email: identifier,
 					},
 					{
-						fullName: identifier,
+						full_name: identifier,
 					},
 				],
 			},
@@ -49,18 +46,18 @@ class AuthRepository {
 	async findByUserId(userId: string | null) {
 		if (!userId) return null;
 		return await this.db.user.findFirst({
-			where: { userId: userId },
+			where: { user_id: userId },
 		});
 	}
 }
 
 function toDto(data: any) {
 	return {
-		userId: data.userId,
+		userId: data.user_id,
 		fullName: data.full_name,
 		email: data.email,
-		createdAt: data.createdAt,
-		updatedAt: data.updatedAt,
+		createdAt: data.created_at,
+		updatedAt: data.updated_at,
 	};
 }
 

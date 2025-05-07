@@ -29,44 +29,45 @@ enum ApplicationStatus {
 }
 
 model User {
-  id        Int      @id @default(autoincrement()) @db.Int
-  userId    String   @unique @db.Char(36)
-  fullName  String   @db.VarChar(100)
-  email     String   @unique
-  password  String?  @db.Text
-  role      Role     @default(ADMIN)
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  updatedAt DateTime @updatedAt @db.Timestamp(6)
+  id         Int      @id @default(autoincrement()) @db.Int
+  user_id    String   @unique @db.Char(36)
+  full_name  String   @db.VarChar(100)
+  email      String   @unique
+  password   String?  @db.Text
+  role       Role     @default(ADMIN)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
 
-  @@index([fullName, email])
+  @@index([full_name, email])
 }
 
 model Applicant {
-  id                Int     @id @default(autoincrement()) @db.Int
-  applicantId       String  @unique @db.Char(36)
-  userId            String  @unique @db.Char(36)
-  phone             String?
-  country           String?
-  yearsOfExperience Int?
+  id                  Int    @id @default(autoincrement()) @db.Int
+  applicant_id        String @unique @db.Char(36)
+  email               String
+  full_name           String
+  phone               String
+  country             String
+  years_of_experience Int
 
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  updatedAt DateTime @updatedAt @db.Timestamp(6)
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  updated_at DateTime @updatedAt @db.Timestamp(6)
 
   applications Application[]
 
-  @@index([applicantId, createdAt])
+  @@index([applicant_id, created_at, full_name])
 }
 
 model Application {
-  id          Int               @id @default(autoincrement()) @db.Int
-  applicantId String            @db.Char(36)
-  resumeUrl   String            @db.Text
-  jobRole     String
-  status      ApplicationStatus @default(APPLIED)
-  appliedAt   DateTime          @default(now()) @db.Timestamp(6)
-  updatedAt   DateTime          @updatedAt
+  id           Int               @id @default(autoincrement()) @db.Int
+  applicant_id String            @db.Char(36)
+  resume_url   String            @db.Text
+  job_role     String
+  status       ApplicationStatus @default(APPLIED)
+  applied_at   DateTime          @default(now()) @db.Timestamp(6)
+  updated_at   DateTime          @updatedAt
 
-  applicant Applicant @relation(fields: [applicantId], references: [applicantId])
+  applicant Applicant @relation(fields: [applicant_id], references: [applicant_id])
 
-  @@index([applicantId])
+  @@index([applicant_id])
 }

@@ -7,5 +7,5 @@ export interface IReqUser extends Request {
 
 export interface IUserToken
 	extends Omit<User, 'password' | 'email' | 'fullName'> {
-	userId?: String;
+	user_id?: String;
 }

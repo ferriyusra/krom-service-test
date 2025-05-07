@@ -7,7 +7,7 @@ import aclMiddleware from '../middleware/acl.middleware';
 import authMiddleware from '../middleware/auth.middleware';
 
 import AuthController from '../modules/controller/auth.controller';
-import UserController from '../modules/controller/user.controller';
+import ApplicationController from '../modules/controller/application.controller';
 import { MediaController } from '../modules/controller/media.controller';
 
 import mediaMiddleware from '../middleware/media.middleware';
@@ -15,17 +15,17 @@ import mediaMiddleware from '../middleware/media.middleware';
 export class ApiRouter {
 	private router: Router;
 	private authController: AuthController;
-	private userController: UserController;
+	private applicationController: ApplicationController;
 	private mediaController: MediaController;
 
 	constructor(
 		authController: AuthController,
-		userController: UserController,
+		applicationController: ApplicationController,
 		mediaController: MediaController
 	) {
 		this.router = express.Router();
 		this.authController = authController;
-		this.userController = userController;
+		this.applicationController = applicationController;
 		this.mediaController = mediaController;
 		this.initializeRoutes();
 	}
@@ -69,6 +69,21 @@ export class ApiRouter {
 			*/
 		);
 
+		// Application Route
+		this.router.post(
+			'/v1/applications',
+			[authMiddleware, aclMiddleware([ROLES.ADMIN])],
+			(req: IReqUser, res: Response, _next: NextFunction) =>
+				this.applicationController.create(req, res)
+		);
+
+		this.router.get(
+			'/v1/applicants',
+			[authMiddleware, aclMiddleware([ROLES.ADMIN])],
+			(req: IReqUser, res: Response, _next: NextFunction) =>
+				this.applicationController.list(req, res)
+		);
+
 		// Media Route
 		this.router.post(
 			'/v1/media/upload-single',
@@ -93,12 +108,12 @@ export class ApiRouter {
 
 export default (
 	authController: AuthController,
-	userController: UserController,
+	applicationController: ApplicationController,
 	mediaController: MediaController
 ): Router => {
 	return new ApiRouter(
 		authController,
-		userController,
+		applicationController,
 		mediaController
 	).getRouter();
 };
