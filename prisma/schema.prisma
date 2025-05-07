@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+}
+
+enum ApplicationStatus {
+  CANDIDATE_REJECTED
+  OFFER_ACCEPTED
+  INTERVIEW_DONE
+  APPLIED
+  CONTACTED
+  HIRED
+  OFFER_MADE
+  INTERVIEW_SCHEDULED
+}
+
+model User {
+  id        Int      @id @default(autoincrement()) @db.Int
+  userId    String   @unique @db.Char(36)
+  fullName  String   @db.VarChar(100)
+  email     String   @unique
+  password  String?  @db.Text
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+
+  @@index([fullName, email])
+}
+
+model Applicant {
+  id                Int     @id @default(autoincrement()) @db.Int
+  applicantId       String  @unique @db.Char(36)
+  userId            String  @unique @db.Char(36)
+  phone             String?
+  country           String?
+  yearsOfExperience Int?
+
+  createdAt DateTime @default(now()) @db.Timestamp(6)
+  updatedAt DateTime @updatedAt @db.Timestamp(6)
+
+  applications Application[]
+
+  @@index([applicantId, createdAt])
+}
+
+model Application {
+  id          Int               @id @default(autoincrement()) @db.Int
+  applicantId String            @db.Char(36)
+  resumeUrl   String            @db.Text
+  jobRole     String
+  status      ApplicationStatus @default(APPLIED)
+  appliedAt   DateTime          @default(now()) @db.Timestamp(6)
+  updatedAt   DateTime          @updatedAt
+
+  applicant Applicant @relation(fields: [applicantId], references: [applicantId])
+
+  @@index([applicantId])
+}
