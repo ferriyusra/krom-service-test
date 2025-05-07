@@ -1,7 +1,7 @@
 ### Test CRM
 
-- Login as teacher
-  email : teacher@gmail.com
+- Login as admin
+  email : admin@gmail.com
   pass : Test2025
 
 ### API Docs
@@ -20,7 +20,7 @@ ex:
 - fixing/login
 - hot-fix/typo-in-login
 
-### Template ExpressJS With Typescript and Repository Pattern
+### ExpressJS With Typescript and Repository Pattern
 
 #### Tech Stack
 
