@@ -67,7 +67,7 @@ class ApplicantRepository {
 			orderBy = { [field]: dir === 'desc' ? 'desc' : 'asc' };
 		}
 
-		const where = filters.length ? { AND: filters } : undefined;
+		const where = filters.length ? { OR: filters } : undefined;
 
 		const [rows, count] = await Promise.all([
 			this.db.application.findMany({
@@ -84,6 +84,17 @@ class ApplicantRepository {
 			rows: rows.map(toDto),
 			count,
 		};
+	}
+
+	async finById(id: string) {
+		const res = await this.db.application.findFirst({
+			where: {
+				applicant_id: id,
+			},
+			include: { applicant: true },
+		});
+
+		return res ? toDto(res) : null;
 	}
 
 	async create(data: any) {
@@ -103,7 +114,7 @@ class ApplicantRepository {
 
 function toDto(data: any) {
 	let obj = {
-		applicantId: data.applicant_id,
+		id: data.applicant_id,
 		resumeUrl: data.resume_url,
 		jobRole: data.job_role,
 		status: data.status,

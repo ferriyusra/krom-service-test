@@ -7,6 +7,10 @@ class ApplicantService {
 		return this.applicantRepository.list(paging, options);
 	}
 
+	async findById(id: string) {
+		return this.applicantRepository.finById(id);
+	}
+
 	async create(data: any) {
 		return this.applicantRepository.create(data);
 	}

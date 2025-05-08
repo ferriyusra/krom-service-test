@@ -53,6 +53,22 @@ class ApplicationController {
 		}
 	}
 
+	async findOne(req: IReqUser, res: Response) {
+		try {
+			const { id } = req.params;
+
+			const result = await this.applicantService.findById(id);
+
+			if (!result) {
+				return response.notfound(res, 'Applicant not found');
+			}
+
+			return response.success(res, result, 'Success find one applicant');
+		} catch (error) {
+			return response.error(res, error, 'Failed find one applicant');
+		}
+	}
+
 	async create(req: IReqUser, res: Response) {
 		try {
 			const {
@@ -84,7 +100,7 @@ class ApplicationController {
 			});
 
 			const application = await this.applicationService.create({
-				applicantId: applicant.applicantId,
+				applicantId: applicant.id,
 				jobRole,
 				status: STATUS.APPLIED,
 				resumeUrl,

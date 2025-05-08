@@ -84,6 +84,13 @@ export class ApiRouter {
 				this.applicationController.list(req, res)
 		);
 
+		this.router.get(
+			'/v1/applicants/:id',
+			[authMiddleware, aclMiddleware([ROLES.ADMIN])],
+			(req: IReqUser, res: Response, _next: NextFunction) =>
+				this.applicationController.findOne(req, res)
+		);
+
 		// Media Route
 		this.router.post(
 			'/v1/media/upload-single',
