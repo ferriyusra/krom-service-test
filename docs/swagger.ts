@@ -28,11 +28,17 @@ const doc = {
 				identifier: 'yourname',
 				password: 'yourpassword',
 			},
-			RegisterRequest: {
-				fullName: 'yourname',
-				email: 'youremail@mail.com',
-				password: 'yourpassword',
-				confirmPassword: 'yourConfirmpassword',
+			createApplicants: {
+				fullName: 'user33',
+				email: 'user33@gmail.com',
+				yearsOfExperience: 1,
+				phone: '08123321',
+				jobRole: 'test',
+				country: 'test',
+				resumeUrl: 'url',
+			},
+			RemoveMediaRequest: {
+				fileUrl: 'mediaURL',
 			},
 		},
 	},

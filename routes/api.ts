@@ -32,18 +32,11 @@ export class ApiRouter {
 
 	private initializeRoutes(): void {
 		// Auth Route
-		this.router.post(
-			'/v1/auth/register',
-			(req: Request, res: Response, _next: NextFunction) =>
-				this.authController.register(req, res)
-			/*
-			#swagger.tags = ['Auth']
-			#swagger.requestBody = {
-				required: true,
-				schema: {$ref: '#/components/schemas/RegisterRequest'}
-			}
-			*/
-		);
+		// this.router.post(
+		// 	'/v1/auth/register',
+		// 	(req: Request, res: Response, _next: NextFunction) =>
+		// 		this.authController.register(req, res)
+		// );
 		this.router.post(
 			'/v1/auth/login',
 			(req: Request, res: Response, _next: NextFunction) =>
@@ -75,6 +68,16 @@ export class ApiRouter {
 			[authMiddleware, aclMiddleware([ROLES.ADMIN])],
 			(req: IReqUser, res: Response, _next: NextFunction) =>
 				this.applicationController.create(req, res)
+			/*
+			#swagger.tags = ['Applications']
+			#swagger.security = [{
+      	"bearerAuth": {}
+      }]
+			#swagger.requestBody = {
+				required: true,
+				schema: {$ref: '#/components/schemas/createApplicants'}
+			}
+			*/
 		);
 
 		this.router.get(
@@ -82,6 +85,42 @@ export class ApiRouter {
 			[authMiddleware, aclMiddleware([ROLES.ADMIN])],
 			(req: IReqUser, res: Response, _next: NextFunction) =>
 				this.applicationController.list(req, res)
+			/*
+				#swagger.tags = ['Applicants']
+				#swagger.parameters['page'] = {
+					in: 'query',
+					type: 'number',
+					default: 1
+				}
+				#swagger.parameters['perPage'] = {
+					in: 'query',
+					type: 'number',
+					default: 10
+				}
+				#swagger.parameters['fullName[like]'] = {
+					in: 'query',
+					type: 'string',
+					default: ""
+				}
+				#swagger.parameters['country'] = {
+					in: 'query',
+					type: 'string',
+					default: ""
+				}
+				#swagger.parameters['jobRole'] = {
+					in: 'query',
+					type: 'string',
+					default: ""
+				}
+				#swagger.parameters['status'] = {
+					in: 'query',
+					type: 'string',
+					default: ""
+				}
+				#swagger.security = [{
+					"bearerAuth": {}
+				}]
+			*/
 		);
 
 		this.router.get(
@@ -89,6 +128,12 @@ export class ApiRouter {
 			[authMiddleware, aclMiddleware([ROLES.ADMIN])],
 			(req: IReqUser, res: Response, _next: NextFunction) =>
 				this.applicationController.findOne(req, res)
+			/*
+			#swagger.tags = ['Applicants']
+			#swagger.security = [{
+      	"bearerAuth": {}
+      }]
+			*/
 		);
 
 		// Media Route
@@ -98,6 +143,28 @@ export class ApiRouter {
 			mediaMiddleware.single('file'),
 			(req: IReqUser, res: Response, _next: NextFunction) =>
 				this.mediaController.single(req, res)
+			/*
+			#swagger.tags = ['Media']
+			#swagger.security = [{
+				"bearerAuth": {}
+			}]
+			#swagger.requestBody = {
+					required: true,
+					content: {
+					"multipart/form-data": {
+						schema: {
+							type: "object",
+							properties: {
+								file: {
+									type: "string",
+									format: "binary"
+								}
+							}
+						}
+					}
+				}
+			}
+			*/
 		);
 
 		this.router.delete(
@@ -105,6 +172,18 @@ export class ApiRouter {
 			[authMiddleware, aclMiddleware([ROLES.ADMIN])],
 			(req: IReqUser, res: Response, _next: NextFunction) =>
 				this.mediaController.remove(req, res)
+			/*
+			#swagger.tags = ['Media']
+			#swagger.security = [{
+				"bearerAuth": {}
+			}]
+			#swagger.requestBody = {
+				required: true,
+				schema: {
+					$ref: '#/components/schemas/RemoveMediaRequest'
+				}
+			}
+			*/
 		);
 	}
 
