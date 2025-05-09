@@ -6,7 +6,7 @@
 
 ### API Docs
 
-- API Docs : https://service-be-test-be.vercel.app/api-docs/
+- API Docs : https://krom-service-test.vercel.app/api-docs/
 
 ### Branch Rule
 
