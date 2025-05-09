@@ -12,7 +12,7 @@ const doc = {
 			description: 'Local server',
 		},
 		{
-			url: 'https://service-be-test-be.vercel.app/api',
+			url: 'https://krom-service-test.vercel.app/',
 			description: 'Development server',
 		},
 	],
