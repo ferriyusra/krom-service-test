@@ -26,7 +26,7 @@ ex:
 
 - Express
 - Prisma ORM
-- PostgreSQL
+- Mysql
 
 #### Express Configuration
 
